@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja" data-model-url="./model.json"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>沖ドキGOLD｜補正モデル</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#173047;background:#f1f5fa}body{max-width:1050px;margin:30px auto;padding:0 16px}h1{font-size:clamp(22px,4vw,32px);margin-bottom:8px}.sub{color:#54697c}.notice{background:#fff3d5;border-left:4px solid #cf921b;padding:14px;line-height:1.7;border-radius:6px}.panel{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:18px;margin:18px 0;box-shadow:0 3px 14px #20304708}form{display:flex;gap:16px;flex-wrap:wrap;align-items:end}label{display:block;font-size:13px;font-weight:600}input{display:block;width:160px;padding:10px;margin-top:6px;font:inherit;border:1px solid #9aafc2;border-radius:6px}button{background:#126ab3;color:white;border:0;border-radius:6px;padding:12px 20px;cursor:pointer;font-weight:700}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;white-space:nowrap}th,td{padding:10px 13px;text-align:right}th{background:#173047;color:white}tr:nth-child(even){background:#eef4fa}.plus{color:#0865c7}.minus{color:#c1353a}.muted{color:#728291}summary{cursor:pointer}small{line-height:1.8}#state{margin:12px 0}.details{font-size:13px}a{color:#126ab3}
+</style>
+<style>.history-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}input{box-sizing:border-box;width:110px;font-size:24px;font-weight:650;padding:8px}#lend,#exchange{width:90px}.history-actions input{width:110px}.bonus-bb{color:#bf2936;font-weight:750}.bonus-rb{color:#126ab3;font-weight:750}button.bonus-bb{background:#bf2936;color:#fff;font-size:18px}button.bonus-rb{background:#126ab3;color:#fff;font-size:18px}.secondary{background:#e4edf5;color:#173047}button:disabled{opacity:.45;cursor:default}button[hidden]{display:none}.history-list{max-height:240px;overflow:auto;margin-top:14px}.history-list th{position:sticky;top:0}.history-value{font-size:20px;margin:12px 0}.restore{font-size:12px;margin-top:8px;padding:8px 10px}#history-error{color:#c1353a;min-height:1.3em}</style>
+<style>
+:root{font-size:17px}
+h1{font-size:clamp(24px,4vw,34px)}
+label,.details{font-size:14px}
+.history-value{font-size:22px}
+button{font-family:inherit;font-size:16px}
+button.bonus-bb,button.bonus-rb{font-size:19px}
+.restore{font-size:13px}
+input{font-size:22px;height:48px;line-height:1.25}
+</style>
+<h1>沖ドキ！GOLD <span class="sub">/ GOLD-30</span></h1>
+<p class="sub">事前計算モデル · 天国間100G × 当該50G · 端数は成分を線形内挿</p>
+<div class="notice"><strong>96%はユーザー指定の補正仮定です。</strong><br>天国抜けC=0・当該32Gからの打ち切り条件を96%に合わせた推定です。実証された理論値や勝利保証ではありません。途中放棄の偏りは残る可能性があります。</div>
+
+<p class="sub">修正版：当選時の天国間G数別に継続を推定／初めて2,000Gを踏んだ当たりを分離</p>
+<section class="panel" aria-labelledby="history-heading">
+<h2 id="history-heading">履歴から天国間G数を計算</h2>
+<form id="history-form" class="history-actions" novalidate>
+<input id="history-games" aria-label="当選までのG数" type="number" min="0" step="1" inputmode="numeric" placeholder="入力" autocomplete="off" required><span>G</span>
+<button type="submit" data-kind="BB" class="bonus-bb">BB</button><button type="submit" data-kind="RB" class="bonus-rb">RB</button>
+<button type="button" id="history-undo" class="secondary" disabled>ひとつ戻す</button>
+<button type="button" id="history-clear" class="secondary" disabled>全消去</button>
+</form><div id="history-error" role="alert"></div>
+<p class="history-value">天国間G数：<strong id="history-C">0</strong> G</p>
+<small>古い順に入力してください。計算開始前を0Gとし、BB消化69G／RB消化29Gを加算。2件目以降の32G以内の当選で天国として0に戻します。履歴の追加・取消・全消去で下のCを自動更新します。履歴はこのページを開いている間のみ保持します。</small>
+<div class="history-list"><table><thead><tr><th>順番</th><th>当選G数</th><th>種別</th><th>G数</th></tr></thead><tbody id="history-rows"></tbody></table></div>
+</section>
+<div class="panel"><form id="form">
+<div><label>前回ボーナス終了時の天国間G数 C<input id="C" name="C" type="number" min="0" max="2068" step="1" value="1000" required></label><button id="history-restore" type="button" class="secondary restore" hidden>履歴から自動入力</button></div>
+<label>1,000円の貸出枚数<input id="lend" name="lend" type="number" min="0.001" step="any" value="50" required></label>
+<label>1,000円の交換枚数<input id="exchange" name="exchange" type="number" min="50" step="any" value="50" required></label>
+<button>表を表示</button></form>
+<p><small>Cは内部の有利区間カウンターではなく、前回ボーナス終了時点の天国間累計です。例：C=1,000、当該300G → 現在1,300G。天国直後はC=0。別状態を混ぜないためC=1〜99は非表示です。</small></p>
+<div id="state" role="status"></div><div class="scroll"><table><thead><tr><th>当該G数</th><th>期待値</th><th>期待収支（枚）</th><th>機械割</th><th>所要時間</th></tr></thead><tbody id="rows"></tbody></table></div><small>所要時間：通常時・ボーナス中とも750G/時。休憩などは含みません。交換枚数は貸出枚数以上にしてください。</small></div>
+<details class="panel"><summary>投資・回収・消化G数と計算条件</summary><p><small>コイン持ち32G/50枚。BB 210枚・69G、RB 90枚・29G。天国は32G以内の2連以上。次の天国を32Gで抜けるか、天国間2,000G以上で当選し32G以内の連続当選がなければ終了。持ちメダルを再利用し、不足分のみ連続量で借りる仮定（千円単位への丸めなし）。</small></p>
+<p><small>円収支＝平均回収枚数×1,000÷交換枚数 − 平均投資枚数×1,000÷貸出枚数。機械割は交換率に左右されない物理枚数ベース。平均投資・回収・通常G・ボーナスGを内挿後、収支と比率を算出します。観測30区間・5店舗未満などの箇所は数値を出しません。MC誤差はモデルの不確実性全体ではありません。</small></p>
+<div class="scroll"><table class="details"><thead><tr><th>G数</th><th>投資枚数</th><th>回収枚数</th><th>通常G</th><th>ボーナスG</th><th>観測区間 / 店舗</th><th>MC標準誤差（枚）</th></tr></thead><tbody id="details"></tbody></table></div></details>
+
+<p class="muted"><small>保存済み営業日：2026-10-07 ～ 2026-10-28（14日分・日付の欠けあり） ｜入力時はSQLiteへのアクセス・再集計・シミュレーションを行いません。</small></p>
+<script src="./static/history.js" defer></script><script src="./static/estimate.js" defer></script><script src="./static/app.js" defer></script>
+
+</html>
