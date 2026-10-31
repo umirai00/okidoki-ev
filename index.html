@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ja" data-model-url="./model.json"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>沖ドキGOLD｜補正モデル</title>
+<title>沖ドキGOLD｜期待値表</title>
 <style>
 :root{font-family:system-ui,sans-serif;color:#173047;background:#f1f5fa}body{max-width:1050px;margin:30px auto;padding:0 16px}h1{font-size:clamp(22px,4vw,32px);margin-bottom:8px}.sub{color:#54697c}.notice{background:#fff3d5;border-left:4px solid #cf921b;padding:14px;line-height:1.7;border-radius:6px}.panel{background:white;border:1px solid #d7e1eb;border-radius:12px;padding:18px;margin:18px 0;box-shadow:0 3px 14px #20304708}form{display:flex;gap:16px;flex-wrap:wrap;align-items:end}label{display:block;font-size:13px;font-weight:600}input{display:block;width:160px;padding:10px;margin-top:6px;font:inherit;border:1px solid #9aafc2;border-radius:6px}button{background:#126ab3;color:white;border:0;border-radius:6px;padding:12px 20px;cursor:pointer;font-weight:700}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;white-space:nowrap}th,td{padding:10px 13px;text-align:right}th{background:#173047;color:white}tr:nth-child(even){background:#eef4fa}.plus{color:#0865c7}.minus{color:#c1353a}.muted{color:#728291}summary{cursor:pointer}small{line-height:1.8}#state{margin:12px 0}.details{font-size:13px}a{color:#126ab3}
 </style>
@@ -15,13 +15,46 @@ button.bonus-bb,button.bonus-rb{font-size:19px}
 .restore{font-size:13px}
 input{font-size:22px;height:48px;line-height:1.25}
 </style>
+<style>
+*{box-sizing:border-box}
+:root{font-size:16px;color:#222;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif}
+body{max-width:720px;margin:20px auto;padding:0 14px;line-height:1.5}
+h1{font-size:24px;line-height:1.4;margin:0 0 8px;letter-spacing:-.03em}
+h1 .sub{font-size:15px;font-weight:500}
+h2{font-size:16px;margin:0 0 12px}
+.sub,.muted{color:#666}.notice{padding:0;margin:0 0 20px;background:none;border:0;border-radius:0;font-size:12px;color:#666;line-height:1.6}
+.panel{border:0;border-top:1px solid #ddd;border-radius:0;box-shadow:none;padding:16px 0;margin:0}
+form{gap:12px;align-items:end}
+label{font-size:12px;color:#555;font-weight:500}
+input{max-width:100%;height:44px;font-size:20px;border:1px solid #bbb;border-radius:4px;margin-top:5px;color:#222;background:#fff}
+button{font-size:14px;min-height:44px;border-radius:4px;padding:9px 12px;background:#333}
+.secondary{background:#f1f1f1;color:#444}button.bonus-bb,button.bonus-rb{font-size:17px;padding:9px 18px}
+.history-actions{gap:8px}.history-actions input{width:96px}.history-value{font-size:18px;margin:12px 0 8px}
+.history-list{margin-top:10px}.history-list:has(tbody:empty){display:none}
+#history-error:empty{display:none}#history-error{font-size:13px;margin-top:8px;min-height:0}
+.history-help{margin-top:10px;font-size:12px;color:#666}.history-help summary{font-size:12px}
+#form{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
+.c-field{grid-column:1 / -1}#C{width:140px}#lend,#exchange{width:100%;max-width:132px}
+#form>button{display:none}.restore{font-size:12px;margin-top:6px}
+#state{font-size:12px;color:#666;margin:16px 0 8px}
+table{width:100%;table-layout:fixed;white-space:normal;font-size:14px}
+th,td{padding:11px 5px;text-align:right;border-bottom:1px solid #e9e9e9;overflow-wrap:anywhere}
+th{background:#f2f2f2;color:#555;font-size:12px;font-weight:600;line-height:1.4}
+th:first-child,td:first-child{text-align:left}tr:nth-child(even){background:#fafafa}
+.results-wrap{overflow:visible}.results-table th:nth-child(1){width:14%}.results-table th:nth-child(2){width:26%}.results-table th:nth-child(3){width:23%}.results-table th:nth-child(4){width:18%}.results-table th:nth-child(5){width:19%}
+.results-table td{font-variant-numeric:tabular-nums;letter-spacing:-.035em}
+.results-table td:nth-child(2),.results-table td:nth-child(3){font-weight:600}
+.results-table td:last-child{font-size:clamp(10px,3vw,12px);white-space:nowrap;letter-spacing:-.04em}
+.plus{color:#1266bb}.minus{color:#bd3038}small{font-size:12px;line-height:1.7}
+.time-note{display:block;margin-top:10px;color:#777;font-size:11px}
+details.panel>summary{font-size:13px;color:#555}.details{font-size:12px}.details th{font-size:10px}.details th,.details td{padding:8px 2px}
+@media(max-width:380px){body{padding:0 10px;margin-top:16px}h1{font-size:22px}table{font-size:12px}th,td{padding:10px 3px}.results-table th{font-size:11px}}
+</style>
 <h1>沖ドキ！GOLD <span class="sub">/ GOLD-30</span></h1>
-<p class="sub">事前計算モデル · 天国間100G × 当該50G · 端数は成分を線形内挿</p>
-<div class="notice"><strong>96%はユーザー指定の補正仮定です。</strong><br>天国抜けC=0・当該32Gからの打ち切り条件を96%に合わせた推定です。実証された理論値や勝利保証ではありません。途中放棄の偏りは残る可能性があります。</div>
+<p class="notice">96%補正モデルによる推定値です。実証された理論値ではありません。</p>
 
-<p class="sub">修正版：当選時の天国間G数別に継続を推定／初めて2,000Gを踏んだ当たりを分離</p>
 <section class="panel" aria-labelledby="history-heading">
-<h2 id="history-heading">履歴から天国間G数を計算</h2>
+<h2 id="history-heading">ボーナス履歴</h2>
 <form id="history-form" class="history-actions" novalidate>
 <input id="history-games" aria-label="当選までのG数" type="number" min="0" step="1" inputmode="numeric" placeholder="入力" autocomplete="off" required><span>G</span>
 <button type="submit" data-kind="BB" class="bonus-bb">BB</button><button type="submit" data-kind="RB" class="bonus-rb">RB</button>
@@ -29,21 +62,21 @@ input{font-size:22px;height:48px;line-height:1.25}
 <button type="button" id="history-clear" class="secondary" disabled>全消去</button>
 </form><div id="history-error" role="alert"></div>
 <p class="history-value">天国間G数：<strong id="history-C">0</strong> G</p>
-<small>古い順に入力してください。計算開始前を0Gとし、BB消化69G／RB消化29Gを加算。2件目以降の32G以内の当選で天国として0に戻します。履歴の追加・取消・全消去で下のCを自動更新します。履歴はこのページを開いている間のみ保持します。</small>
+<details class="history-help"><summary>履歴の入力方法</summary><small>古い順に入力してください。計算開始前を0Gとし、BB消化69G／RB消化29Gを加算。2件目以降の32G以内の当選で天国として0に戻します。履歴の追加・取消・全消去で下の天国間G数を自動更新します。履歴はこのページを開いている間のみ保持します。</small></details>
 <div class="history-list"><table><thead><tr><th>順番</th><th>当選G数</th><th>種別</th><th>G数</th></tr></thead><tbody id="history-rows"></tbody></table></div>
 </section>
 <div class="panel"><form id="form">
-<div><label>前回ボーナス終了時の天国間G数 C<input id="C" name="C" type="number" min="0" max="2068" step="1" value="1000" required></label><button id="history-restore" type="button" class="secondary restore" hidden>履歴から自動入力</button></div>
-<label>1,000円の貸出枚数<input id="lend" name="lend" type="number" min="0.001" step="any" value="50" required></label>
-<label>1,000円の交換枚数<input id="exchange" name="exchange" type="number" min="50" step="any" value="50" required></label>
+<div class="c-field"><label>天国間G数（前回ボーナス終了時）<input id="C" name="C" type="number" min="0" max="2068" step="1" inputmode="numeric" value="1000" required></label><button id="history-restore" type="button" class="secondary restore" hidden>履歴から自動入力</button></div>
+<label>貸出枚数 / 1,000円<input id="lend" name="lend" type="number" min="0.001" step="any" inputmode="decimal" value="50" required></label>
+<label>交換枚数 / 1,000円<input id="exchange" name="exchange" type="number" min="50" step="any" inputmode="decimal" value="50" required></label>
 <button>表を表示</button></form>
-<p><small>Cは内部の有利区間カウンターではなく、前回ボーナス終了時点の天国間累計です。例：C=1,000、当該300G → 現在1,300G。天国直後はC=0。別状態を混ぜないためC=1〜99は非表示です。</small></p>
-<div id="state" role="status"></div><div class="scroll"><table><thead><tr><th>当該G数</th><th>期待値</th><th>期待収支（枚）</th><th>機械割</th><th>所要時間</th></tr></thead><tbody id="rows"></tbody></table></div><small>所要時間：通常時・ボーナス中とも750G/時。休憩などは含みません。交換枚数は貸出枚数以上にしてください。</small></div>
+<div id="state" role="status"></div><div class="results-wrap"><table class="results-table" aria-label="期待値表"><thead><tr><th>当該<br>G数</th><th>期待値<br>（円）</th><th>収支<br>（枚）</th><th>機械割</th><th>所要<br>時間</th></tr></thead><tbody id="rows"></tbody></table></div><small class="time-note">所要時間は750G/時で計算。交換枚数は貸出枚数以上。</small></div>
 <details class="panel"><summary>投資・回収・消化G数と計算条件</summary><p><small>コイン持ち32G/50枚。BB 210枚・69G、RB 90枚・29G。天国は32G以内の2連以上。次の天国を32Gで抜けるか、天国間2,000G以上で当選し32G以内の連続当選がなければ終了。持ちメダルを再利用し、不足分のみ連続量で借りる仮定（千円単位への丸めなし）。</small></p>
+<p><small>96%はユーザー指定の補正仮定です。天国抜けC=0・当該32Gからの打ち切り条件を96%に合わせた推定で、勝利保証ではありません。途中放棄の偏りは残る可能性があります。Cは内部の有利区間カウンターではなく、前回ボーナス終了時点の天国間累計です。例：C=1,000、当該300G → 現在1,300G。天国直後はC=0。別状態を混ぜないためC=1〜99は非表示です。天国間100G × 当該50Gの事前計算表を内挿します。所要時間は通常時・ボーナス中とも750G/時で、休憩を含みません。</small></p>
 <p><small>円収支＝平均回収枚数×1,000÷交換枚数 − 平均投資枚数×1,000÷貸出枚数。機械割は交換率に左右されない物理枚数ベース。平均投資・回収・通常G・ボーナスGを内挿後、収支と比率を算出します。観測30区間・5店舗未満などの箇所は数値を出しません。MC誤差はモデルの不確実性全体ではありません。</small></p>
 <div class="scroll"><table class="details"><thead><tr><th>G数</th><th>投資枚数</th><th>回収枚数</th><th>通常G</th><th>ボーナスG</th><th>観測区間 / 店舗</th><th>MC標準誤差（枚）</th></tr></thead><tbody id="details"></tbody></table></div></details>
 
-<p class="muted"><small>保存済み営業日：2026-10-07 ～ 2026-10-28（14日分・日付の欠けあり） ｜入力時はSQLiteへのアクセス・再集計・シミュレーションを行いません。</small></p>
+<p class="muted"><small>対象：2026-10-07 ～ 2026-10-28（14日分・欠けあり）</small></p>
 <script src="./static/history.js" defer></script><script src="./static/estimate.js" defer></script><script src="./static/app.js" defer></script>
 
 </html>
