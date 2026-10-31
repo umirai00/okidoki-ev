@@ -62,7 +62,7 @@ details.panel>summary{font-size:13px;color:#555}.details{font-size:12px}.details
 <button type="button" id="history-clear" class="secondary" disabled>全消去</button>
 </form><div id="history-error" role="alert"></div>
 <p class="history-value">天国間G数：<strong id="history-C">0</strong> G</p>
-<details class="history-help"><summary>履歴の入力方法</summary><small>古い順に入力してください。計算開始前を0Gとし、BB消化69G／RB消化29Gを加算。2件目以降の32G以内の当選で天国として0に戻します。履歴の追加・取消・全消去で下の天国間G数を自動更新します。履歴はこのページを開いている間のみ保持します。</small></details>
+<details class="history-help"><summary>履歴の入力方法</summary><small>古い順に入力してください。計算開始前を0Gとし、当選G数とBB消化69G／RB消化29Gを加算します。32G以内の当選でも自動リセットしません。天国抜けを起点に入力してください。履歴の追加・取消・全消去で下の天国間G数を自動更新します。履歴はこのページを開いている間のみ保持します。</small></details>
 <div class="history-list"><table><thead><tr><th>順番</th><th>当選G数</th><th>種別</th><th>G数</th></tr></thead><tbody id="history-rows"></tbody></table></div>
 </section>
 <div class="panel"><form id="form">
@@ -70,7 +70,7 @@ details.panel>summary{font-size:13px;color:#555}.details{font-size:12px}.details
 <label>貸出枚数 / 1,000円<input id="lend" name="lend" type="number" min="0.001" step="any" inputmode="decimal" value="50" required></label>
 <label>交換枚数 / 1,000円<input id="exchange" name="exchange" type="number" min="50" step="any" inputmode="decimal" value="50" required></label>
 <button>表を表示</button></form>
-<div id="state" role="status"></div><div class="results-wrap"><table class="results-table" aria-label="期待値表"><thead><tr><th>当該<br>G数</th><th>期待値<br>（円）</th><th>収支<br>（枚）</th><th>機械割</th><th>所要<br>時間</th></tr></thead><tbody id="rows"></tbody></table></div><small class="time-note">所要時間は750G/時で計算。交換枚数は貸出枚数以上。</small></div>
+<div id="state" role="status"></div><div class="results-wrap"><table class="results-table" aria-label="期待値表"><thead><tr><th>当該<br>G数</th><th>期待値<br>（円）</th><th>収支<br>（枚）</th><th>機械割</th><th>時給<br>（円）</th></tr></thead><tbody id="rows"></tbody></table></div><small class="time-note">時給＝期待値÷所要時間（750G/時）。交換枚数は貸出枚数以上。</small></div>
 <details class="panel"><summary>投資・回収・消化G数と計算条件</summary><p><small>コイン持ち32G/50枚。BB 210枚・69G、RB 90枚・29G。天国は32G以内の2連以上。次の天国を32Gで抜けるか、天国間2,000G以上で当選し32G以内の連続当選がなければ終了。持ちメダルを再利用し、不足分のみ連続量で借りる仮定（千円単位への丸めなし）。</small></p>
 <p><small>96%はユーザー指定の補正仮定です。天国抜けC=0・当該32Gからの打ち切り条件を96%に合わせた推定で、勝利保証ではありません。途中放棄の偏りは残る可能性があります。Cは内部の有利区間カウンターではなく、前回ボーナス終了時点の天国間累計です。例：C=1,000、当該300G → 現在1,300G。天国直後はC=0。別状態を混ぜないためC=1〜99は非表示です。天国間100G × 当該50Gの事前計算表を内挿します。所要時間は通常時・ボーナス中とも750G/時で、休憩を含みません。</small></p>
 <p><small>円収支＝平均回収枚数×1,000÷交換枚数 − 平均投資枚数×1,000÷貸出枚数。機械割は交換率に左右されない物理枚数ベース。平均投資・回収・通常G・ボーナスGを内挿後、収支と比率を算出します。観測30区間・5店舗未満などの箇所は数値を出しません。MC誤差はモデルの不確実性全体ではありません。</small></p>

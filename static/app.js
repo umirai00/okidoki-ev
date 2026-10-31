@@ -62,7 +62,10 @@
         }
         ok++;cell(tr,(r.yen>=0?'+':'')+num(r.yen,0)+'円',r.yen>=0?'plus':'minus');
         cell(tr,(r.profit_medals>=0?'+':'')+num(r.profit_medals),r.profit_medals>=0?'plus':'minus');
-        cell(tr,num(r.machine_return_pct)+'%');cell(tr,h.formatTime(r.duration_minutes));rows.appendChild(tr);
+        cell(tr,num(r.machine_return_pct)+'%');
+        const hourly=r.duration_minutes>0?r.yen*60/r.duration_minutes:NaN;
+        cell(tr,Number.isFinite(hourly)?(hourly>=0?'+':'')+num(hourly,0)+'円':'—',
+          Number.isFinite(hourly)?(hourly>=0?'plus':'minus'):'muted');rows.appendChild(tr);
         tr=document.createElement('tr');
         for(const t of [num(r.g,0),num(r.I),num(r.R),num(r.normal_G),num(r.bonus_G),`${num(r.source_origins,0)} / ${num(r.source_stores,0)}`,num(r.mc_se_medals)])cell(tr,t);
         details.appendChild(tr);

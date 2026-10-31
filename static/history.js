@@ -18,7 +18,7 @@
     const rows=entries.map((entry,i)=>{
       const g=games(entry.games);
       if(entry.kind!=='BB' && entry.kind!=='RB')throw Error('BBかRBを選択してください');
-      C=i>0 && g<=32?0:C+g+(entry.kind==='BB'?69:29);
+      C=C+g+(entry.kind==='BB'?69:29);
       if(!Number.isSafeInteger(C))throw Error('累計G数が大きすぎます');
       return {games:g,kind:entry.kind,C};
     });
